@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="EventLogSearching.EventLogList.EventLogListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EventLogSearching.EventLogList"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="450">
+   
+    <UserControl.DataContext>
+        <local:EventLogListViewModel/>
+        <!--<ViewModel:ViewModelEventAlarm/> -->
+    </UserControl.DataContext>
+
+
+    <DockPanel>
+        <!--Style-->
+        <DockPanel.Resources>
+            <!-- Resources -->
+            <!-- Image -->
+
+           
+        </DockPanel.Resources>
+
+        <!-- Mail Alarm ListView -->
+
+        <!--ToolBar-->
+        <Grid DockPanel.Dock ="Top">
+            <ToolBarTray >
+                <ToolBar  >
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="2" IsDefault="True" Height="32"
+                                Command="{Binding Export}" >
+                            
+                        </Button>
+                    </StackPanel>
+
+                </ToolBar>
+
+            </ToolBarTray>
+        </Grid>
+
+
+        <!-- Status Bar -->
+        <StatusBar DockPanel.Dock ="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+
+            <StatusBarItem Grid.Column="0" Content="…"/>
+            <Separator Grid.Column="1"/>
+            <StatusBarItem Grid.Column="2" Content="…"/>
+        </StatusBar>
+
+        <Grid DockPanel.Dock ="Top">
+            <DataGrid ItemsSource="{Binding ListEventLog}" 
+                      x:Name="MainAlarmGrid"  FontSize="13" 
+                      SelectedItem ="{Binding SelectedEvent}"
+                      Background="DarkGray" GridLinesVisibility="Horizontal" 
+                      AutoGenerateColumns="False" CanUserAddRows="False" BorderThickness="0" 
+                      HorizontalGridLinesBrush="#FFCCCCCC" Margin="0,0,-0.5,0" Cursor="Hand" 
+                      VirtualizingPanel.ScrollUnit="Pixel" >
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Header="Event Time"
+                                        Binding="{Binding Time}"
+                                        IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Station Name"
+                                        Binding="{Binding StationName}"
+                                        Width="SizetoHeader"
+                                        IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Event"
+                                        Binding="{Binding Event}"
+                                        IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Message"
+                                        Binding="{Binding Message}"
+                                        IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Value"
+                                        Binding="{Binding Value}"
+                                        IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Source"
+                                        Binding="{Binding Source}"
+                                        IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        
+    </DockPanel>
+</UserControl>

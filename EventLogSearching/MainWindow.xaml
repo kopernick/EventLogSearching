@@ -4,9 +4,105 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EventLogSearching"
+        xmlns:EventLogList="clr-namespace:EventLogSearching.EventLogList" 
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+        <Grid.Resources>
+            <BitmapImage x:Key="searchImage" UriSource = "/EventLogSearching;component/images/search.png" />
+            <BitmapImage x:Key="exportImage" UriSource = "/EventLogSearching;component/images/export.png" />
+        </Grid.Resources>
         
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <!--ToolBar-->
+        <Grid DockPanel.Dock ="Top" Grid.Row="0">
+            <ToolBarTray >
+                <ToolBar  >
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="5,2" IsDefault="True"  Height="32"
+                                Command="{Binding OpenFileDlg}" >
+                            Open File(s)
+                        </Button>
+                        
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14">
+                            ค้นหา:
+                        </Label>
+
+                        <TextBox MinWidth ="200" x:Name="txtPage" 
+                             Text="{Binding StrSearchEventParse, UpdateSourceTrigger=PropertyChanged}" Margin="2" FontSize="14" HorizontalAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding Path = EnterPageCommand}"/>
+                                <!--
+                            <KeyBinding Key="Enter" Command="{Binding Path = EnterPageCommand}"
+                                        CommandParameter="{Binding ElementName=txtPage, Path=Text}"/>
+                            -->
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Button Margin="5,2" IsDefault="True"  Height="32"
+                                Command="{Binding cmdSearching}" >
+                            <Image Source= "{StaticResource searchImage}"/>
+                        </Button>
+
+                        <Button Margin="15,2" IsDefault="True"  Height="32"
+                                Command="{Binding cmdClearList}" >
+                            ClearList
+                        </Button>
+                    </StackPanel>
+
+                </ToolBar>
+
+            </ToolBarTray>
+        </Grid>
+
+        <DockPanel Grid.Row="1">
+ 
+                <!--
+                    <EventLogList:EventLogListView Grid.Column="0" x:Name="MainView" Margin="2" HorizontalAlignment="Stretch" Width="Auto"/>
+                -->
+            <Grid DockPanel.Dock ="Top" HorizontalAlignment="Stretch" Width="Auto">
+                <DataGrid ItemsSource="{Binding ListEventLog}" 
+                      x:Name="MainAlarmGrid"  FontSize="13" 
+                      SelectedItem ="{Binding SelectedEvent}"
+                      Background="DarkGray" GridLinesVisibility="Horizontal" 
+                      AutoGenerateColumns="False" CanUserAddRows="False" BorderThickness="0" 
+                      HorizontalGridLinesBrush="#FFCCCCCC" Margin="0,0,-0.5,0" Cursor="Hand" 
+                      VirtualizingPanel.ScrollUnit="Pixel" >
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Event Time"
+                                        Binding="{Binding Time}"
+                                        IsReadOnly="True"/>
+
+                        <DataGridTextColumn Header="Station Name"
+                                        Binding="{Binding StationName}"
+                                        Width="SizetoHeader"
+                                        IsReadOnly="True"/>
+
+                        <DataGridTextColumn Header="Event"
+                                        Binding="{Binding Event}"
+                                        IsReadOnly="True"/>
+
+                        <DataGridTextColumn Header="Message"
+                                        Binding="{Binding Message}"
+                                        IsReadOnly="True"/>
+
+                        <DataGridTextColumn Header="Value"
+                                        Binding="{Binding Value}"
+                                        IsReadOnly="True"/>
+
+                        <DataGridTextColumn Header="Source"
+                                        Binding="{Binding Source}"
+                                        IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+        </DockPanel>
+
     </Grid>
 </Window>

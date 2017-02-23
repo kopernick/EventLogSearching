@@ -13,17 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EventLogSearching
+namespace EventLogSearching.EventLogList
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for EventLogListView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EventLogListView : UserControl
     {
-        public MainWindow()
+        public EventLogListView()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowViewModel();
         }
     }
 }
