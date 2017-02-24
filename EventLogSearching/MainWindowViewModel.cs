@@ -10,6 +10,7 @@ using EventLogSearching.Service;
 using Microsoft.Win32;
 using System.Windows;
 using System.Collections.ObjectModel;
+using System.Windows.Controls.Ribbon;
 
 namespace EventLogSearching
 {
@@ -19,6 +20,7 @@ namespace EventLogSearching
         private EventLogRepo m_repoEventLog;
 
         private ObservableCollection<EventLog> m_ListEventLog;
+        private List<string> StrSearchEventList;
         //public static List<RestorationAlarmList> CustAlarmListDump { get; private set; }
         public ObservableCollection<EventLog> ListEventLog
         {
@@ -33,13 +35,45 @@ namespace EventLogSearching
         private OpenFileDialog openFileDialog { get; set; }
         public string[] fileList { get; set; }
 
-        private String m_strSearchEventParse;
-        public String StrSearchEventParse
+        private String m_strSearchEventParse1;
+        public String StrSearchEventParse1
         {
-            get { return m_strSearchEventParse; }
+            get { return m_strSearchEventParse1; }
             set {
-                    m_strSearchEventParse = value;
-                    OnPropertyChanged("StrSearchEventParse");
+                    m_strSearchEventParse1 = value;
+                    OnPropertyChanged("StrSearchEventParse1");
+            }
+        }
+
+        private String m_strSearchEventParse2;
+        public String StrSearchEventParse2
+        {
+            get { return m_strSearchEventParse2; }
+            set
+            {
+                m_strSearchEventParse2 = value;
+                OnPropertyChanged("StrSearchEventParse2");
+            }
+        }
+        private String m_strSearchEventParse3;
+        public String StrSearchEventParse3
+        {
+            get { return m_strSearchEventParse3; }
+            set
+            {
+                m_strSearchEventParse1 = value;
+                OnPropertyChanged("StrSearchEventParse3");
+            }
+        }
+
+        private String m_strSearchMessageParse;
+        public String StrSearchMessageParse
+        {
+            get { return m_strSearchMessageParse; }
+            set
+            {
+                m_strSearchMessageParse = value;
+                OnPropertyChanged("StrSearchMessageParse");
             }
         }
 
@@ -47,7 +81,12 @@ namespace EventLogSearching
         public MainWindowViewModel()
         {
             this.m_repoEventLog = new EventLogRepo();
-            this.m_strSearchEventParse = "";
+            this.m_strSearchEventParse1 = "";
+            this.m_strSearchEventParse2 = "";
+            this.m_strSearchEventParse3 = "";
+            this.m_strSearchMessageParse = "";
+
+            this.StrSearchEventList = new List<string>();
             this.ListEventLog = new ObservableCollection<EventLog>();
 
             this.openFileDialog = new OpenFileDialog();
@@ -81,16 +120,20 @@ namespace EventLogSearching
         public RelayCommand cmdSearching { get; private set; }
         private bool canSearchCommand()
         {
-            return (m_strSearchEventParse != "");
+            return (m_strSearchEventParse1 != "" && this.fileList != null);
         }
 
         private async void onSearchCommand()
         {
-            //this.m_repoEventLog.ReadRptFile();
+            StrSearchEventList.Clear();
+
+            StrSearchEventList.Add(this.m_strSearchEventParse1);
+            StrSearchEventList.Add(this.m_strSearchEventParse2);
+            StrSearchEventList.Add(this.m_strSearchEventParse3);
 
             if (this.fileList != null)
             {
-                await Task.Run(() => this.m_repoEventLog.ReadRptFileAsync(this.fileList, this.m_strSearchEventParse));
+                await Task.Run(() => this.m_repoEventLog.ReadRptFileAsync(this.fileList, this.StrSearchEventList, this.m_strSearchMessageParse));
 
                 //For only first time
                 if (this.ListEventLog == null)
@@ -113,7 +156,7 @@ namespace EventLogSearching
         public RelayCommand cmdClearList { get; private set; }
         private bool canSClearListCommand()
         {
-            return (this.ListEventLog != null);
+            return (this.ListEventLog.Count > 0);
         }
 
         private void onClearListCommand()

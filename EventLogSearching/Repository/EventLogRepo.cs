@@ -83,6 +83,7 @@ namespace EventLogSearching.Repository
                             .Skip(4)
                             .Select(line => GetLineEventRptFile(line))
                             .Where(line => line.Event.Contains(this.m_strSearchEventParse))
+                            .Where(line => line.Event.Contains(""))
                             .ToList();
                 //this.m_dLastReadCSV = DateTime.Now;
                 return true;
@@ -107,11 +108,50 @@ namespace EventLogSearching.Repository
                             .Skip(4)
                             .Select(line => GetLineEventRptFile(line))
                             .Where(line => line.Event.Contains(StrSearchEventParse))
+                            
                             .ToList<EventLog>();
 
                 this.m_listEventLogs.AddRange(listEventLog);
             }
             
+        }
+
+        public void ReadRptFileAsync(string[] fileList, String StrSearchEventParse, String StrSearchMessageParse)
+        {
+            this.m_listEventLogs.Clear();
+
+            foreach (var file in fileList)
+            {
+                IEnumerable<EventLog> listEventLog = File.ReadLines(file)
+                           .Skip(4)
+                           .Select(line => GetLineEventRptFile(line))
+                           .Where(line => line.Event.Contains(StrSearchEventParse))
+                           .Where(line => line.Message.Contains(StrSearchMessageParse))
+                           .ToList<EventLog>();
+
+                this.m_listEventLogs.AddRange(listEventLog);
+            }
+
+        }
+
+        public void ReadRptFileAsync(string[] fileList, List<string> StrSearchEventList, String StrSearchMessageParse)
+        {
+            this.m_listEventLogs.Clear();
+
+            foreach (var file in fileList)
+            {
+                IEnumerable<EventLog> listEventLog = File.ReadLines(file)
+                           .Skip(4)
+                           .Select(line => GetLineEventRptFile(line))
+                           .Where(line => line.Event.Contains(StrSearchEventList[0]))
+                           .Where(line => line.Event.Contains(StrSearchEventList[1]))
+                           .Where(line => line.Event.Contains(StrSearchEventList[2]))
+                           .Where(line => line.Message.Contains(StrSearchMessageParse))
+                           .ToList<EventLog>();
+
+                this.m_listEventLogs.AddRange(listEventLog);
+            }
+
         }
 
         public static EventLog GetLineEventRptFile(string RptLine)

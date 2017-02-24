@@ -6,11 +6,13 @@
         xmlns:local="clr-namespace:EventLogSearching"
         xmlns:EventLogList="clr-namespace:EventLogSearching.EventLogList" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="680">
+    
     <Grid>
         <Grid.Resources>
             <BitmapImage x:Key="searchImage" UriSource = "/EventLogSearching;component/images/search.png" />
             <BitmapImage x:Key="exportImage" UriSource = "/EventLogSearching;component/images/export.png" />
+            <BitmapImage x:Key="DelImage" UriSource = "/EventLogSearching;component/images/Del.png" />
         </Grid.Resources>
         
         <Grid.RowDefinitions>
@@ -19,7 +21,96 @@
         </Grid.RowDefinitions>
         
         <!--ToolBar-->
-        <Grid DockPanel.Dock ="Top" Grid.Row="0">
+        <Ribbon x:Name="RibbonWin" DockPanel.Dock="Top" SelectedIndex="0" Grid.Row="0">
+            <!-- Application Menu, located at the left-hand side (down arrow) -->
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu KeyTip="F">
+                    <RibbonApplicationMenuItem Header="Exit" ImageSource="Images\export.png" />
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
+           
+            <RibbonTab x:Name="Main" Header="Main">
+
+                <RibbonGroup x:Name="OpentFile" Header="Open File(s)">
+                    <Grid>
+                        <Grid.ColumnDefinitions >
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Column="0" Grid.Row="0" Margin="2" Content="OpenFile" Grid.RowSpan="2"
+                                Command="{Binding OpenFileDlg}">
+                            </Button>
+                    </Grid>
+                    
+                </RibbonGroup>
+                <!-- Keyword  group-->
+
+                <RibbonGroup x:Name="Codition" Header="Search Condition">
+                    <Grid>
+                        <Grid.ColumnDefinitions >
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Column 1 -->
+                        <!-- Row 1 -->
+                        <Label Grid.Column="0" Grid.Row="0" Margin="2" Content="Event Keyword"/>
+                        <!-- Row 2 -->
+                        <TextBox Grid.Column="1" Grid.Row="0" MinWidth="80" Grid.ColumnSpan="1" 
+                                Text="{Binding StrSearchEventParse1, UpdateSourceTrigger=PropertyChanged}" Margin="2">
+                        </TextBox>
+                        <TextBox Grid.Column="2" Grid.Row="0" MinWidth="80" Grid.ColumnSpan="1" 
+                                Text="{Binding StrSearchEventParse2, UpdateSourceTrigger=PropertyChanged}" Margin="2">
+                        </TextBox>
+                        <TextBox Grid.Column="3" Grid.Row="0" MinWidth="80" Grid.ColumnSpan="1" 
+                                Text="{Binding StrSearchEventParse3, UpdateSourceTrigger=PropertyChanged}" Margin="2">
+                        </TextBox>
+
+                        <!-- Row2 -->
+
+                        <Label Grid.Column="0" Grid.Row="1" Margin="2" Content="Message Keyword"/>
+                        <TextBox Grid.Column="1" Grid.Row="1" MinWidth="240" Grid.ColumnSpan="3"
+                               Text="{Binding StrSearchMessageParse, UpdateSourceTrigger=PropertyChanged}" Margin="2">
+                        </TextBox>
+                    </Grid>
+
+                </RibbonGroup>
+
+                <RibbonGroup x:Name="SearchCommand" Header="Command">
+                    <RibbonButton LargeImageSource="{StaticResource searchImage}" Label="Search" KeyTip="S" 
+                                Command="{Binding cmdSearching}" />
+                    <RibbonButton  LargeImageSource="{StaticResource DelImage}" Label="ClearList"
+                                Command="{Binding cmdClearList}" >
+                        
+                    </RibbonButton>
+                </RibbonGroup>
+
+                <RibbonGroup x:Name="Export" Header="Export">
+                    <RibbonButton LargeImageSource="{StaticResource exportImage}" Label="Export to CSV" KeyTip="S" 
+                                Command="{Binding cmdExportToCSV}" />
+
+                </RibbonGroup>
+            </RibbonTab>
+            
+        </Ribbon>
+        <!--
+            <Grid DockPanel.Dock ="Top" Grid.Row="0">
             <ToolBarTray >
                 <ToolBar  >
 
@@ -37,10 +128,6 @@
                              Text="{Binding StrSearchEventParse, UpdateSourceTrigger=PropertyChanged}" Margin="2" FontSize="14" HorizontalAlignment="Center">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding Path = EnterPageCommand}"/>
-                                <!--
-                            <KeyBinding Key="Enter" Command="{Binding Path = EnterPageCommand}"
-                                        CommandParameter="{Binding ElementName=txtPage, Path=Text}"/>
-                            -->
                             </TextBox.InputBindings>
                         </TextBox>
                         <Button Margin="5,2" IsDefault="True"  Height="32"
@@ -58,6 +145,7 @@
 
             </ToolBarTray>
         </Grid>
+    -->
 
         <DockPanel Grid.Row="1">
  
