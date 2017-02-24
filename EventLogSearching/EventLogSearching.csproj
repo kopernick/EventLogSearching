@@ -62,7 +62,6 @@
     <Compile Include="EventLogList\EventLogListViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Model\EventLog.cs" />
-    <Compile Include="Repository\AnalogCSVRepo.cs" />
     <Compile Include="Repository\EventLogRepo.cs" />
     <Compile Include="Service\PropertyChangeEventBase.cs" />
     <Compile Include="Service\RelayCommand .cs" />
@@ -84,7 +83,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\AnalogPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,6 +100,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
