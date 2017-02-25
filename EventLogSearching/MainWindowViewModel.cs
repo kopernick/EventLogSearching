@@ -21,7 +21,6 @@ namespace EventLogSearching
 
        // public Expression<Func<EventLog, bool>> searchParseDeleg;
         public Expression<Func<EventLog, bool>> searchParseDeleg;
-        public static List<Item> searchList = new List<Item>();
 
         private ObservableCollection<EventLog> m_ListEventLog;
         string[] StrSearchEventList1;
