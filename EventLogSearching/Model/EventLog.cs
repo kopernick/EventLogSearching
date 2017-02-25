@@ -32,20 +32,20 @@ namespace EventLogSearching.Model
             get { return m_DateTime; }
         }
 
-        private String m_strStationName;
-        public String StationName
+        private string m_strStationName;
+        public string StationName
         {
             get { return m_strStationName; }
         }
 
-        private String m_strEvent;
-        public String Event
+        private string m_strEvent;
+        public string Event
         {
             get { return m_strEvent; }
         }
 
-        private String m_strMessage;
-        public String Message
+        private string m_strMessage;
+        public string Message
         {
             get { return m_strMessage; }
         }
@@ -55,8 +55,8 @@ namespace EventLogSearching.Model
         {
             get { return m_fValue; }
         }
-        private String m_strSource;
-        public String Source
+        private string m_strSource;
+        public string Source
         {
             get { return m_strSource; }
         }

@@ -20,11 +20,14 @@ namespace EventLogSearching
         private EventLogRepo m_repoEventLog;
 
        // public Expression<Func<EventLog, bool>> searchParseDeleg;
-       public Expression<Func<EventLog, bool>> searchParseDeleg;
+        public Expression<Func<EventLog, bool>> searchParseDeleg;
         public static List<Item> searchList = new List<Item>();
 
         private ObservableCollection<EventLog> m_ListEventLog;
-        string[] StrSearchEventList;
+        string[] StrSearchEventList1;
+        string[] StrSearchEventList2;
+        string[] StrSearchEventList3;
+        string[] StrSearchEventList4;
         //public static List<RestorationAlarmList> CustAlarmListDump { get; private set; }
         public ObservableCollection<EventLog> ListEventLog
         {
@@ -42,52 +45,64 @@ namespace EventLogSearching
         private SaveFileDialog saveFileDialog { get; set; }
         public string[] fileList { get; set; }
         public string saveFileFullPath { get; set; }
-        public string[] feildName { get; set; }
-        
-        private String m_strSearchEventParse1;
-        public String StrSearchEventParse1
+        public string[] fieldName { get; set; }
+
+        private string m_ExpressionTree;
+        public string ExpressionTree
+        {
+            get { return m_ExpressionTree;}
+            set
+            {
+                m_ExpressionTree = value;
+                OnPropertyChanged("ExpressionTree");
+            }
+        }
+
+        private string m_strSearchEventParse1;
+        public string StrSearchEventParse1
         {
             get { return m_strSearchEventParse1; }
             set
             {
                 m_strSearchEventParse1 = value;
-                StrSearchEventList[0] = m_strSearchEventParse1;
+                this.StrSearchEventList1 = m_strSearchEventParse1.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
                 OnPropertyChanged("StrSearchEventParse1");
             }
         }
 
-        private String m_strSearchEventParse2;
-        public String StrSearchEventParse2
+        private string m_strSearchEventParse2;
+        public string StrSearchEventParse2
         {
             get { return m_strSearchEventParse2; }
             set
             {
                 m_strSearchEventParse2 = value;
-                StrSearchEventList[1] = m_strSearchEventParse2;
+                this.StrSearchEventList2 = m_strSearchEventParse2.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 OnPropertyChanged("StrSearchEventParse2");
             }
         }
-        private String m_strSearchEventParse3;
-        public String StrSearchEventParse3
+        private string m_strSearchEventParse3;
+        public string StrSearchEventParse3
         {
             get { return m_strSearchEventParse3; }
             set
             {
                 m_strSearchEventParse3 = value;
-                StrSearchEventList[2] = m_strSearchEventParse3;
+                this.StrSearchEventList3 = m_strSearchEventParse3.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 OnPropertyChanged("StrSearchEventParse3");
             }
         }
 
-        private String m_strSearchMessageParses;
+        private string m_strSearchMessageParses;
 
-        public String StrSearchMessageParses
+        public string StrSearchMessageParses
         {
             get { return m_strSearchMessageParses; }
             set
             {
                 m_strSearchMessageParses = value;
+                this.StrSearchEventList4 = m_strSearchMessageParses.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 OnPropertyChanged("StrSearchMessageParses");
             }
         }
@@ -99,10 +114,14 @@ namespace EventLogSearching
             this.m_strSearchEventParse1 = "";
             this.m_strSearchEventParse2 = "";
             this.m_strSearchEventParse3 = "";
-
-            this.StrSearchEventList = new string[] { m_strSearchEventParse1, m_strSearchEventParse2, m_strSearchEventParse3 };
-
             this.m_strSearchMessageParses = "";
+
+            this.StrSearchEventList1 = m_strSearchEventParse1.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            this.StrSearchEventList2 = m_strSearchEventParse2.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            this.StrSearchEventList3 = m_strSearchEventParse3.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            this.StrSearchEventList4 = m_strSearchMessageParses.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+            this.searchParseDeleg = null;
 
 
             this.ListEventLog = new ObservableCollection<EventLog>();
@@ -120,7 +139,7 @@ namespace EventLogSearching
 
             //gets all FieldName
             var properties = typeof(EventLog).GetProperties();
-            this.feildName = properties.Select(d => d.Name).ToArray();
+            this.fieldName = properties.Select(d => d.Name).ToArray();
 
             //Init Command
             OpenFileDlg = new RelayCommand(O => onOpenFileCommand(), O => canOpenFileCommand());
@@ -173,8 +192,7 @@ namespace EventLogSearching
 
             //Generate CSV File
             if (ExportToCSV.CreateCSVFromGenericList(listEventLog, this.saveFileFullPath))
-                MessageBox.Show("Complete Saving @ " + this.saveFileFullPath.ToString(), "Saved Location", MessageBoxButton.OK, MessageBoxImage.Information); ;
-            
+                MessageBox.Show("Saving Complete @ " + this.saveFileFullPath.ToString(), "Saved Location", MessageBoxButton.OK, MessageBoxImage.Information); ;
 
         }
 
@@ -197,28 +215,35 @@ namespace EventLogSearching
             {
 
                 //searchParseDeleg = xxxx;
-                searchList.Add(new Item(feildName[(int)EventLogField.EVENT_FIELD], "FieldName"));
+               // searchList.Add(new Item(feildName[(int)EventLogField.EVENT_FIELD], "FieldName"))
 
-                string[] search_Event_Parse_List1 = StrSearchEventParse1.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                string[] search_Event_Parse_List2 = StrSearchEventParse2.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                string[] search_Event_Parse_List3 = StrSearchEventParse3.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                searchParseDeleg = SearchingExpressionBuilder.GetExpression<EventLog>(feildName[(int)EventLogField.EVENT_FIELD],search_Event_Parse_List1);
-                //searchParseDeleg = SearchingExpressionBuilder.GetExpression<EventLog>(groupFields, search_Event_Parse_List1, search_Event_Parse_List2,search_Event_Parse_List3);
+                List<SearchElement> searchItems = new List<SearchElement>();
+
+                searchItems.Add(new SearchElement(StrSearchEventList1, fieldName[(int)EventLogField.EVENT_FIELD]));
+                searchItems.Add(new SearchElement(StrSearchEventList2, fieldName[(int)EventLogField.EVENT_FIELD]));
+                searchItems.Add(new SearchElement(StrSearchEventList3, fieldName[(int)EventLogField.EVENT_FIELD]));
+                searchItems.Add(new SearchElement(StrSearchEventList4, fieldName[(int)EventLogField.MESSAGE_FIELD]));
+
+
+                searchParseDeleg = SearchingExpressionBuilder.GetExpression<EventLog>(searchItems);
 
 
                 if (searchParseDeleg == null)
                 {
+
                     Console.WriteLine("Expression Building Error");
+                    ExpressionTree = "Expression Building Error";
                 }
                 else
                 {
-                    //RestAlarmsRepo.filterParseDeleg = searchParseDeleg;
-                    //await RestAlarmsRepo.GetCustAlarmAct();
-                   Console.WriteLine(searchParseDeleg.Body);
+                    Console.WriteLine(searchParseDeleg.Body);
+                    ExpressionTree = searchParseDeleg.Body.ToString();
+                    await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, searchParseDeleg));
+                    
                 }
 
 
-                await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, search_Event_Parse_List1, m_strSearchMessageParses));
+               // await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, search_Event_Parse_List1, m_strSearchMessageParses));
 
 
                 //For only first time

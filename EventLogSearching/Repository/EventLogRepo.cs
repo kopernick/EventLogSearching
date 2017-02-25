@@ -157,18 +157,18 @@ namespace EventLogSearching.Repository
         }
 
         //Use Where by Linq Expression
-        public void ReadRptFileAsync(string[] fileList, string[] StrSearchEventList, String StrSearchMessageParse, Expression<Func<EventLog, bool>> filterParseDeleg)
+        public void ReadRptFileAsync(string[] fileList, Expression<Func<EventLog, bool>> filterParseDeleg)
         {
+            // Compiling the expression tree into a delegate.  
+            Func<EventLog, bool> result = filterParseDeleg.Compile();
             this.m_listEventLogs.Clear();
 
             foreach (var file in fileList)
             {
-                IEnumerable<EventLog> listEventLog = File.ReadLines(file)
-                           .Skip(4)
-                           .Select(line => GetLineEventRptFile(line))
-                           .Where(line => line.Event.Contains(StrSearchEventList[0]))
-                           .Where(line => line.Message.Contains(StrSearchMessageParse))
-                           .ToList<EventLog>();
+                IEnumerable<EventLog> listEventLog = File.ReadLines(file).Skip(4)
+                          .Select(line => GetLineEventRptFile(line))
+                          .Where(result)
+                          .ToList<EventLog>();
 
                 this.m_listEventLogs.AddRange(listEventLog);
             }
