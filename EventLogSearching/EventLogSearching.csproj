@@ -65,8 +65,11 @@
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Model\EventLog.cs" />
     <Compile Include="Repository\EventLogRepo.cs" />
+    <Compile Include="Service\ExportToCSV.cs" />
+    <Compile Include="Service\Item.cs" />
     <Compile Include="Service\PropertyChangeEventBase.cs" />
     <Compile Include="Service\RelayCommand .cs" />
+    <Compile Include="Service\SearchingExpressionBuilder.cs" />
     <Page Include="EventLogList\EventLogListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +132,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\Del.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\OpenFile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,7 +10,7 @@ using EventLogSearching.Service;
 using Microsoft.Win32;
 using System.Windows;
 using System.Collections.ObjectModel;
-using System.Windows.Controls.Ribbon;
+using System.Linq.Expressions;
 
 namespace EventLogSearching
 {
@@ -19,8 +19,12 @@ namespace EventLogSearching
 
         private EventLogRepo m_repoEventLog;
 
+       // public Expression<Func<EventLog, bool>> searchParseDeleg;
+       public Expression<Func<EventLog, bool>> searchParseDeleg;
+        public static List<Item> searchList = new List<Item>();
+
         private ObservableCollection<EventLog> m_ListEventLog;
-        private List<string> StrSearchEventList;
+        string[] StrSearchEventList;
         //public static List<RestorationAlarmList> CustAlarmListDump { get; private set; }
         public ObservableCollection<EventLog> ListEventLog
         {
@@ -32,16 +36,24 @@ namespace EventLogSearching
             }
         }
 
-        private OpenFileDialog openFileDialog { get; set; }
-        public string[] fileList { get; set; }
 
+        public MessageBox myMessageBox { get; set; }
+        private OpenFileDialog openFileDialog { get; set; }
+        private SaveFileDialog saveFileDialog { get; set; }
+        public string[] fileList { get; set; }
+        public string saveFileFullPath { get; set; }
+        public string[] feildName { get; set; }
+        
         private String m_strSearchEventParse1;
         public String StrSearchEventParse1
         {
             get { return m_strSearchEventParse1; }
-            set {
-                    m_strSearchEventParse1 = value;
-                    OnPropertyChanged("StrSearchEventParse1");
+            set
+            {
+                m_strSearchEventParse1 = value;
+                StrSearchEventList[0] = m_strSearchEventParse1;
+
+                OnPropertyChanged("StrSearchEventParse1");
             }
         }
 
@@ -52,6 +64,7 @@ namespace EventLogSearching
             set
             {
                 m_strSearchEventParse2 = value;
+                StrSearchEventList[1] = m_strSearchEventParse2;
                 OnPropertyChanged("StrSearchEventParse2");
             }
         }
@@ -61,19 +74,21 @@ namespace EventLogSearching
             get { return m_strSearchEventParse3; }
             set
             {
-                m_strSearchEventParse1 = value;
+                m_strSearchEventParse3 = value;
+                StrSearchEventList[2] = m_strSearchEventParse3;
                 OnPropertyChanged("StrSearchEventParse3");
             }
         }
 
-        private String m_strSearchMessageParse;
-        public String StrSearchMessageParse
+        private String m_strSearchMessageParses;
+
+        public String StrSearchMessageParses
         {
-            get { return m_strSearchMessageParse; }
+            get { return m_strSearchMessageParses; }
             set
             {
-                m_strSearchMessageParse = value;
-                OnPropertyChanged("StrSearchMessageParse");
+                m_strSearchMessageParses = value;
+                OnPropertyChanged("StrSearchMessageParses");
             }
         }
 
@@ -84,77 +99,53 @@ namespace EventLogSearching
             this.m_strSearchEventParse1 = "";
             this.m_strSearchEventParse2 = "";
             this.m_strSearchEventParse3 = "";
-            this.m_strSearchMessageParse = "";
 
-            this.StrSearchEventList = new List<string>();
+            this.StrSearchEventList = new string[] { m_strSearchEventParse1, m_strSearchEventParse2, m_strSearchEventParse3 };
+
+            this.m_strSearchMessageParses = "";
+
+
             this.ListEventLog = new ObservableCollection<EventLog>();
 
+            //this.myMessageBox = new MessageBox();
+            //Init openFile dialog
             this.openFileDialog = new OpenFileDialog();
             this.openFileDialog.Multiselect = true;
             this.openFileDialog.Filter = "Report (*.rpt)|*.rpt;|" + "All files (*.*)|*.*";
 
-            OpenFileDlg = new RelayCommand(O => onFirstPageCommand(), O => canPrePageCommand());
-            cmdSearching = new RelayCommand(O => onSearchCommand(), O => canSearchCommand());
-            cmdClearList = new RelayCommand(O => onClearListCommand(), O => canSClearListCommand());
+            //Init savefile dialog
+            this.saveFileDialog = new SaveFileDialog();
+            this.saveFileDialog.Filter = "Report (*.csv)|*.csv;|" + "All files (*.*)|*.*";
 
+
+            //gets all FieldName
+            var properties = typeof(EventLog).GetProperties();
+            this.feildName = properties.Select(d => d.Name).ToArray();
+
+            //Init Command
+            OpenFileDlg = new RelayCommand(O => onOpenFileCommand(), O => canOpenFileCommand());
+            cmdSearching = new RelayCommand(O => onSearchCommand(), O => canSearchCommand());
+            cmdClearList = new RelayCommand(O => onClearListCommand(), O => canClearListCommand());
+            cmdExportToCSV = new RelayCommand(O => onExportToCSVtCommand(), O => canExportToCSVtCommand());
 
         }
 
 
         public RelayCommand OpenFileDlg { get; private set; }
-        private bool canPrePageCommand()
+        private bool canOpenFileCommand()
         {
             return (true);
         }
 
-        private void onFirstPageCommand()
+        private void onOpenFileCommand()
         {
             this.openFileDialog.ShowDialog();
             this.fileList = openFileDialog.FileNames;
 
-            //foreach (string y in this.fileList)
-            //    MessageBox.Show(y, "Selected Item",MessageBoxButton.OK,MessageBoxImage.Information);
-
         }
 
-        public RelayCommand cmdSearching { get; private set; }
-        private bool canSearchCommand()
-        {
-            return (m_strSearchEventParse1 != "" && this.fileList != null);
-        }
-
-        private async void onSearchCommand()
-        {
-            StrSearchEventList.Clear();
-
-            StrSearchEventList.Add(this.m_strSearchEventParse1);
-            StrSearchEventList.Add(this.m_strSearchEventParse2);
-            StrSearchEventList.Add(this.m_strSearchEventParse3);
-
-            if (this.fileList != null)
-            {
-                await Task.Run(() => this.m_repoEventLog.ReadRptFileAsync(this.fileList, this.StrSearchEventList, this.m_strSearchMessageParse));
-
-                //For only first time
-                if (this.ListEventLog == null)
-                {
-                    this.ListEventLog = new ObservableCollection<EventLog>(this.m_repoEventLog.ListEventLog);
-                }
-                else //Next Time
-                {
-                    foreach(var EventLog in this.m_repoEventLog.ListEventLog)
-                    {
-                        this.ListEventLog.Add(EventLog);
-                    }
-                }
-                //EventLogs = ListEventLog.Select(s => s.Event);
-                MessageBox.Show("ค้นพบ " + this.ListEventLog.Count.ToString() + " Event(s)" , "เสร็จสิ้นการค้นหา", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
-
-        //cmdClearList = new RelayCommand(O => onClearListCommand(), O => canSClearListCommand());
         public RelayCommand cmdClearList { get; private set; }
-        private bool canSClearListCommand()
+        private bool canClearListCommand()
         {
             return (this.ListEventLog.Count > 0);
         }
@@ -164,6 +155,94 @@ namespace EventLogSearching
             this.ListEventLog.Clear();
 
         }
+
+        public RelayCommand cmdExportToCSV { get; private set; }
+        private bool canExportToCSVtCommand()
+        {
+            return (this.ListEventLog.Count > 0);
+        }
+
+        private void onExportToCSVtCommand()
+        {
+            //Get Save File Location
+            this.saveFileDialog.ShowDialog();
+            this.saveFileFullPath = saveFileDialog.FileName;
+
+            //Change ObservableCollection to list
+            var listEventLog = new List<EventLog>(this.ListEventLog);
+
+            //Generate CSV File
+            if (ExportToCSV.CreateCSVFromGenericList(listEventLog, this.saveFileFullPath))
+                MessageBox.Show("Complete Saving @ " + this.saveFileFullPath.ToString(), "Saved Location", MessageBoxButton.OK, MessageBoxImage.Information); ;
+            
+
+        }
+
+        public RelayCommand cmdSearching { get; private set; }
+        private bool canSearchCommand()
+        {
+            //Can Search if some SearchEventParseX not Null or Empty && has File Name in fileList
+            return (!(
+                    (string.IsNullOrEmpty(this.m_strSearchEventParse1)) &&
+                    (string.IsNullOrEmpty(this.m_strSearchEventParse2)) &&
+                    (string.IsNullOrEmpty(this.m_strSearchEventParse3)))
+                    && this.fileList != null
+                   );
+        }
+
+        private async void onSearchCommand()
+        {
+
+            if (this.fileList != null)
+            {
+
+                //searchParseDeleg = xxxx;
+                searchList.Add(new Item(feildName[(int)EventLogField.EVENT_FIELD], "FieldName"));
+
+                string[] search_Event_Parse_List1 = StrSearchEventParse1.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                string[] search_Event_Parse_List2 = StrSearchEventParse2.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                string[] search_Event_Parse_List3 = StrSearchEventParse3.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                searchParseDeleg = SearchingExpressionBuilder.GetExpression<EventLog>(feildName[(int)EventLogField.EVENT_FIELD],search_Event_Parse_List1);
+                //searchParseDeleg = SearchingExpressionBuilder.GetExpression<EventLog>(groupFields, search_Event_Parse_List1, search_Event_Parse_List2,search_Event_Parse_List3);
+
+
+                if (searchParseDeleg == null)
+                {
+                    Console.WriteLine("Expression Building Error");
+                }
+                else
+                {
+                    //RestAlarmsRepo.filterParseDeleg = searchParseDeleg;
+                    //await RestAlarmsRepo.GetCustAlarmAct();
+                   Console.WriteLine(searchParseDeleg.Body);
+                }
+
+
+                await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, search_Event_Parse_List1, m_strSearchMessageParses));
+
+
+                //For only first time
+                if (this.ListEventLog == null)
+                {
+                    this.ListEventLog = new ObservableCollection<EventLog>(this.m_repoEventLog.ListEventLog);
+                }
+                else //Next Time
+                {
+                    foreach (var EventLog in this.m_repoEventLog.ListEventLog)
+                    {
+                        this.ListEventLog.Add(EventLog);
+                    }
+                }
+                //EventLogs = ListEventLog.Select(s => s.Event);
+                MessageBox.Show("ค้นพบ " + this.ListEventLog.Count.ToString() + " Event(s)", "เสร็จสิ้นการค้นหา", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+            else
+            {
+                MessageBox.Show("คุณไม่ได้เลือก file ที่ต้องการค้นหา ", "File Path Error", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
     }
 }
 

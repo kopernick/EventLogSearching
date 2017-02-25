@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -134,7 +135,8 @@ namespace EventLogSearching.Repository
 
         }
 
-        public void ReadRptFileAsync(string[] fileList, List<string> StrSearchEventList, String StrSearchMessageParse)
+
+        public void ReadRptFileAsync(string[] fileList, string[] StrSearchEventList, String StrSearchMessageParse)
         {
             this.m_listEventLogs.Clear();
 
@@ -144,8 +146,27 @@ namespace EventLogSearching.Repository
                            .Skip(4)
                            .Select(line => GetLineEventRptFile(line))
                            .Where(line => line.Event.Contains(StrSearchEventList[0]))
-                           .Where(line => line.Event.Contains(StrSearchEventList[1]))
-                           .Where(line => line.Event.Contains(StrSearchEventList[2]))
+                           //.Where(line => line.Event.Contains(StrSearchEventList[1]))
+                           //.Where(line => line.Event.Contains(StrSearchEventList[2]))
+                           .Where(line => line.Message.Contains(StrSearchMessageParse))
+                           .ToList<EventLog>();
+
+                this.m_listEventLogs.AddRange(listEventLog);
+            }
+
+        }
+
+        //Use Where by Linq Expression
+        public void ReadRptFileAsync(string[] fileList, string[] StrSearchEventList, String StrSearchMessageParse, Expression<Func<EventLog, bool>> filterParseDeleg)
+        {
+            this.m_listEventLogs.Clear();
+
+            foreach (var file in fileList)
+            {
+                IEnumerable<EventLog> listEventLog = File.ReadLines(file)
+                           .Skip(4)
+                           .Select(line => GetLineEventRptFile(line))
+                           .Where(line => line.Event.Contains(StrSearchEventList[0]))
                            .Where(line => line.Message.Contains(StrSearchMessageParse))
                            .ToList<EventLog>();
 
