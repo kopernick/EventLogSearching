@@ -41,6 +41,8 @@ namespace EventLogSearching
             }
         }
 
+        private List<EventLog> listEventLog { get; set; }
+
         public MessageBox myMessageBox { get; set; }
         private OpenFileDialog openFileDialog { get; set; }
         private SaveFileDialog saveFileDialog { get; set; }
@@ -149,6 +151,8 @@ namespace EventLogSearching
 
             this.searchParseDeleg = null;
 
+            this.listEventLog = null;
+
 
             this.ListEventLog = new ObservableCollection<EventLog>();
 
@@ -215,11 +219,13 @@ namespace EventLogSearching
             this.saveFileFullPath = saveFileDialog.FileName;
 
             //Change ObservableCollection to list
-            var listEventLog = new List<EventLog>(this.ListEventLog);
+            this.listEventLog = new List<EventLog>(this.ListEventLog);
 
             //Generate CSV File
             if (ExportToCSV.CreateCSVFromGenericList(listEventLog, this.saveFileFullPath))
                 MessageBox.Show("Saving Complete @ " + this.saveFileFullPath.ToString(), "Saved Location", MessageBoxButton.OK, MessageBoxImage.Information); ;
+
+            this.listEventLog = null;
 
         }
 
