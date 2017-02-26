@@ -18,6 +18,8 @@ namespace EventLogSearching
 {
     class MainWindowViewModel : PropertyChangeEventBase
     {
+        //Delegate
+      
 
         private EventLogRepo m_repoEventLog;
 
@@ -228,7 +230,6 @@ namespace EventLogSearching
             this.listEventLog = null;
 
         }
-
         public RelayCommand cmdSearching { get; private set; }
         private bool canSearchCommand()
         {
@@ -243,26 +244,34 @@ namespace EventLogSearching
                    );
         }
 
+        private ICommand _showAboutMeCommand;
+        public ICommand ShowAboutMeCommand
+        {
+            get
+            {
+                return _showAboutMeCommand ??
+                       (_showAboutMeCommand = new RelayCommand(p => DisplayAboutMe(), p => true));
+            }
+        }
+
+        private void DisplayAboutMe()
+        {
+            About aboutMe = new About();
+            aboutMe.Show();
+        }
+
         private async void onSearchCommand()
         {
-
             if (this.fileList != null)
             {
 
-                //searchParseDeleg = xxxx;
-               // searchList.Add(new Item(feildName[(int)EventLogField.EVENT_FIELD], "FieldName"))
-
                 List<SearchElement> searchItems = new List<SearchElement>();
-
                 searchItems.Add(new SearchElement(StrSearchEventList1, fieldName[(int)EventLogField.EVENT_FIELD], true));       // Event Include Keyword 1
                 searchItems.Add(new SearchElement(StrSearchEventList2, fieldName[(int)EventLogField.EVENT_FIELD], true));       // Event Include Keyword 2
                 searchItems.Add(new SearchElement(StrSearchEventList3, fieldName[(int)EventLogField.EVENT_FIELD], true));       // Event Include Keyword 3
                 searchItems.Add(new SearchElement(StrSearchEventList4, fieldName[(int)EventLogField.MESSAGE_FIELD], true));     // Message Include Keyword
                 searchItems.Add(new SearchElement(StrSearchEventList5, fieldName[(int)EventLogField.EVENT_FIELD], false));    // Event Exclude Keyword
-
-
                 searchParseDeleg = SearchingExpressionBuilder.GetExpression<EventLog>(searchItems);
-
 
                 if (searchParseDeleg == null)
                 {
@@ -280,14 +289,7 @@ namespace EventLogSearching
                         await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, searchParseDeleg));
                         // very long task
                     }
-                   
-
-
                 }
-
-
-               // await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, search_Event_Parse_List1, m_strSearchMessageParses));
-
 
                 //For only first time
                 if (this.ListEventLog == null)

@@ -11,7 +11,11 @@
     <Window.Resources>
 
     </Window.Resources>
-    
+
+    <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{Binding Path=ShowAboutMeCommand}"/>
+    </Window.InputBindings>
+
     <Grid>
         <Grid.Resources>
             <BitmapImage x:Key="OpenFileImage" UriSource = "/EventLogSearching;component/images/OpenFile.png" />

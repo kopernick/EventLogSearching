@@ -1,0 +1,55 @@
+﻿<Window x:Class="EventLogSearching.Service.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EventLogSearching.Service"
+        mc:Ignorable="d"
+        Title="About" Height="260" Width="280" ResizeMode="NoResize" >
+    
+    <Grid>
+        <Grid.Resources>
+            <BitmapImage x:Key="iConImage" UriSource = "/EventLogSearching;component/images/AppiCon.png" />
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Image Grid.Row="0" Grid.Column="1"
+               Source="{StaticResource iConImage}"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="14" FontWeight="Bold">
+            Search SCADA EventPrintLog
+        </Label>
+        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
+               HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            Version 1.0 Beta 1 (1.0.1.0)
+        </Label>
+        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" 
+               HorizontalAlignment="Center"
+                VerticalAlignment="Bottom">
+            Copyright &#169; 2017 EGAT
+        </Label>
+        <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" 
+               HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+            Powered By Mr.Preecha Teerawong
+        </Label>
+
+    </Grid>
+</Window>
