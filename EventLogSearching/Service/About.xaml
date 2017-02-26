@@ -35,10 +35,9 @@
                FontSize="14" FontWeight="Bold">
             Search SCADA EventPrintLog
         </Label>
-        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
+        <Label x:Name="txtVersion" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-            Version 1.0 Beta 1 (1.0.1.0)
+                VerticalAlignment="Center" >
         </Label>
         <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" 
                HorizontalAlignment="Center"
