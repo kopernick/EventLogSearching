@@ -26,25 +26,33 @@ namespace EventLogSearching.Service
 
             try
             {
-
                 if (!Directory.Exists(Path.GetDirectoryName(csvCompletePath))) Directory.CreateDirectory(Path.GetDirectoryName(csvCompletePath));
 
                 if (!File.Exists(csvCompletePath)) File.Create(csvCompletePath).Close();
                     
                 using (var sw = new StreamWriter(csvCompletePath))
                 {
-
-                    //gets all properties
-                    var properties = typeof(T).GetProperties();
-                    //PropertyInfo[] props = o.GetType().GetProperties();
+                    //gets all properties with Customer OrderAttribute
+                    var properties = from property in typeof(T).GetProperties()
+                                     let orderAttribute = property.GetCustomAttributes(typeof(OrderAttribute), false).SingleOrDefault() as OrderAttribute
+                                     orderby orderAttribute.Order
+                                     select property;
 
                     var result = new StringBuilder();
 
                     //Get header row
                     var HeaderLine = string.Join(",", properties.Select(d => d.Name).ToArray());
+                    
                     //Create CSV String format
                     result.AppendLine(HeaderLine); //Insert Hearder row First
-                    result.Append(CreateCSVTextFormat(list, ",")); //Insert Body
+                                                   
+                    //Insert Body
+                    foreach (var row in list)
+                    {
+                        var values = properties.Select(p => p.GetValue(row, null));
+                        var line = string.Join(",", values);
+                        result.AppendLine(line);
+                    }
                 
                     //Writ to csv File
                     sw.Write(result);
@@ -55,21 +63,6 @@ namespace EventLogSearching.Service
             {
                 return false;
             }
-        }
-
-        private static StringBuilder CreateCSVTextFormat<T>(List<T> data, string seperator = ",")
-        {
-            var properties = typeof(T).GetProperties();
-            var result = new StringBuilder();
-
-            foreach (var row in data)
-            {
-                var values = properties.Select(p => p.GetValue(row, null));
-                var line = string.Join(seperator, values);
-                result.AppendLine(line);
-            }
-
-            return result;
         }
 
     }

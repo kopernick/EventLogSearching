@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventLogSearching.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,35 +28,47 @@ namespace EventLogSearching.Model
         }
         */
         private string m_DateTime;
+
+        [OrderAttribute(1)] //Set OrderAttribute for PropertyInfo
         public string Time
         {
             get { return m_DateTime; }
         }
 
         private string m_strStationName;
+
+        [OrderAttribute(2)]
         public string StationName
         {
             get { return m_strStationName; }
         }
 
         private string m_strEvent;
+
+        [OrderAttribute(3)]
         public string Event
         {
             get { return m_strEvent; }
         }
 
         private string m_strMessage;
+
+        [OrderAttribute(4)]
         public string Message
         {
             get { return m_strMessage; }
         }
 
         private float m_fValue;
+
+        [OrderAttribute(5)]
         public float Value
         {
             get { return m_fValue; }
         }
         private string m_strSource;
+
+        [OrderAttribute(6)]
         public string Source
         {
             get { return m_strSource; }

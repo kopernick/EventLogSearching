@@ -67,6 +67,7 @@
     <Compile Include="Model\EventLog.cs" />
     <Compile Include="Repository\EventLogRepo.cs" />
     <Compile Include="Service\ExportToCSV.cs" />
+    <Compile Include="Service\OrderAttribute.cs" />
     <Compile Include="Service\PropertyChangeEventBase.cs" />
     <Compile Include="Service\RelayCommand .cs" />
     <Compile Include="Model\SearchElement.cs" />
