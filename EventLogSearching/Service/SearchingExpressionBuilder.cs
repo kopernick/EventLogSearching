@@ -83,13 +83,16 @@ namespace EventLogSearching.Service
                     innerExp = Expression.OrElse(innerExp, GetPriSearchExpression<T>(pe, searchItem.FieldName, keyWord));
                 }
             }
-            return innerExp;
+            if(searchItem.isInclude) return innerExp;
+
+            return Expression.Not(innerExp);
         }
 
         private static Expression GetPriSearchExpression<T>(ParameterExpression pe, string FieldName, string filter)
         {
             MemberExpression me = Expression.Property(pe, FieldName); //search in Field ?
-            ConstantExpression constant = Expression.Constant(filter);
+            string toUpperStr = filter.ToUpper();
+            ConstantExpression constant = Expression.Constant(toUpperStr);
             return Expression.Call(me, containsMethod, constant);
         }
     }

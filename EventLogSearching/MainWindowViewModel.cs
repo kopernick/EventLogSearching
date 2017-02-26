@@ -11,6 +11,8 @@ using Microsoft.Win32;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+using System.IO;
+using System.Windows.Input;
 
 namespace EventLogSearching
 {
@@ -27,6 +29,7 @@ namespace EventLogSearching
         string[] StrSearchEventList2;
         string[] StrSearchEventList3;
         string[] StrSearchEventList4;
+        string[] StrSearchEventList5;
         //public static List<RestorationAlarmList> CustAlarmListDump { get; private set; }
         public ObservableCollection<EventLog> ListEventLog
         {
@@ -37,7 +40,6 @@ namespace EventLogSearching
                 OnPropertyChanged("ListEventLog");
             }
         }
-
 
         public MessageBox myMessageBox { get; set; }
         private OpenFileDialog openFileDialog { get; set; }
@@ -57,6 +59,17 @@ namespace EventLogSearching
             }
         }
 
+        private string m_fileDirectory;
+        public string fileDirectory
+        {
+            get { return m_fileDirectory; }
+            set
+            {
+                m_fileDirectory = value;
+                OnPropertyChanged("fileDirectory");
+            }
+        }
+        
         private string m_strSearchEventParse1;
         public string StrSearchEventParse1
         {
@@ -106,6 +119,18 @@ namespace EventLogSearching
             }
         }
 
+        private string m_strSearchExcludeParses;
+        public string StrSearchExcludeParses
+        {
+            get { return m_strSearchExcludeParses; }
+            set
+            {
+                m_strSearchExcludeParses = value;
+                this.StrSearchEventList5 = m_strSearchExcludeParses.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                OnPropertyChanged("StrSearchExcludeParses");
+            }
+        }
+
         //private DispatcherTimer m_dispatcherTimer = new DispatcherTimer();
         public MainWindowViewModel()
         {
@@ -114,11 +139,13 @@ namespace EventLogSearching
             this.m_strSearchEventParse2 = "";
             this.m_strSearchEventParse3 = "";
             this.m_strSearchMessageParses = "";
+            this.m_strSearchExcludeParses = "";
 
             this.StrSearchEventList1 = m_strSearchEventParse1.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             this.StrSearchEventList2 = m_strSearchEventParse2.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             this.StrSearchEventList3 = m_strSearchEventParse3.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             this.StrSearchEventList4 = m_strSearchMessageParses.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            this.StrSearchEventList5 = m_strSearchExcludeParses.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
             this.searchParseDeleg = null;
 
@@ -159,6 +186,7 @@ namespace EventLogSearching
         {
             this.openFileDialog.ShowDialog();
             this.fileList = openFileDialog.FileNames;
+            this.fileDirectory = Path.GetDirectoryName(fileList[0]).ToString();
 
         }
 
@@ -200,9 +228,11 @@ namespace EventLogSearching
         {
             //Can Search if some SearchEventParseX not Null or Empty && has File Name in fileList
             return (!(
-                    (string.IsNullOrEmpty(this.m_strSearchEventParse1)) &&
-                    (string.IsNullOrEmpty(this.m_strSearchEventParse2)) &&
-                    (string.IsNullOrEmpty(this.m_strSearchEventParse3)))
+                    string.IsNullOrEmpty(this.m_strSearchEventParse1) &&
+                    string.IsNullOrEmpty(this.m_strSearchEventParse2) &&
+                    string.IsNullOrEmpty(this.m_strSearchEventParse3) &&
+                    string.IsNullOrEmpty(this.m_strSearchMessageParses) &&
+                    string.IsNullOrEmpty(this.m_strSearchExcludeParses))
                     && this.fileList != null
                    );
         }
@@ -218,10 +248,11 @@ namespace EventLogSearching
 
                 List<SearchElement> searchItems = new List<SearchElement>();
 
-                searchItems.Add(new SearchElement(StrSearchEventList1, fieldName[(int)EventLogField.EVENT_FIELD]));
-                searchItems.Add(new SearchElement(StrSearchEventList2, fieldName[(int)EventLogField.EVENT_FIELD]));
-                searchItems.Add(new SearchElement(StrSearchEventList3, fieldName[(int)EventLogField.EVENT_FIELD]));
-                searchItems.Add(new SearchElement(StrSearchEventList4, fieldName[(int)EventLogField.MESSAGE_FIELD]));
+                searchItems.Add(new SearchElement(StrSearchEventList1, fieldName[(int)EventLogField.EVENT_FIELD], true));       // Event Include Keyword 1
+                searchItems.Add(new SearchElement(StrSearchEventList2, fieldName[(int)EventLogField.EVENT_FIELD], true));       // Event Include Keyword 2
+                searchItems.Add(new SearchElement(StrSearchEventList3, fieldName[(int)EventLogField.EVENT_FIELD], true));       // Event Include Keyword 3
+                searchItems.Add(new SearchElement(StrSearchEventList4, fieldName[(int)EventLogField.MESSAGE_FIELD], true));     // Message Include Keyword
+                searchItems.Add(new SearchElement(StrSearchEventList5, fieldName[(int)EventLogField.EVENT_FIELD], false));    // Event Exclude Keyword
 
 
                 searchParseDeleg = SearchingExpressionBuilder.GetExpression<EventLog>(searchItems);
@@ -237,8 +268,15 @@ namespace EventLogSearching
                 {
                     Console.WriteLine(searchParseDeleg.Body);
                     ExpressionTree = searchParseDeleg.Body.ToString();
-                    await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, searchParseDeleg));
-                    
+
+                    using (new WaitCursor())
+                    {
+                        await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, searchParseDeleg));
+                        // very long task
+                    }
+                   
+
+
                 }
 
 
