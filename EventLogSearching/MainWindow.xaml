@@ -10,49 +10,6 @@
 
     <Window.Resources>
 
-        <Style x:Key="ribbonTemplate" TargetType="RibbonTabHeader">
-                    <Setter Property="Background" Value="White" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                    <Setter Property="Padding" Value="20,4,20,4" />
-                    <Setter Property="BorderThickness" Value="1,1,1,0" />
-                    <Setter Property="Margin" Value="1,0,1,0" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="RibbonTabHeader">
-                                <ControlTemplate.Resources>
-                                    <SolidColorBrush x:Key="CheckedBackground" Color="#FFF5F6F7" />
-                                    <SolidColorBrush x:Key="CheckedBorderBrush" Color="#FFDBDCDD" />
-                                    <SolidColorBrush x:Key="FocusedBackground" Color="#FFFDFDFF" />
-                                    <SolidColorBrush x:Key="FocusedBorderBrush" Color="#FFEDEEEE" />
-                                    <SolidColorBrush x:Key="MouseOverBackground" Color="#FFFDFDFF" />
-                                    <SolidColorBrush x:Key="MouseOverBorderBrush" Color="#FFEDEEEE" />
-                                </ControlTemplate.Resources>
-
-                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                                    <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                ContentSource="{Binding Label}" RecognizesAccessKey="True"/>
-                                </Border>
-
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsRibbonTabSelected" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource CheckedBackground}" />
-                                        <Setter Property="BorderBrush" Value="{DynamicResource CheckedBorderBrush}" />
-                                    </Trigger>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <Condition Property="IsRibbonTabSelected" Value="False" />
-                                            <Condition Property="IsMouseOver" Value="True" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Background" Value="{DynamicResource MouseOverBackground}" />
-                                        <Setter Property="BorderBrush" Value="{DynamicResource MouseOverBorderBrush}" />
-                                    </MultiTrigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-
     </Window.Resources>
     
     <Grid>
@@ -71,10 +28,7 @@
 
         <!--ToolBar-->
         <Ribbon x:Name="RibbonWin" DockPanel.Dock="Top" SelectedIndex="0" Grid.Row="0" >
-            <Ribbon.Resources>
-                
-            </Ribbon.Resources>
-            
+
             <!-- Application Menu, located at the left-hand side (down arrow) -->
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu KeyTip="F">
@@ -115,7 +69,7 @@
                 </RibbonGroup>
                 <!-- Keyword  group-->
 
-                <RibbonGroup x:Name="ContainCodition" Header="Contain Keyword">
+                <RibbonGroup x:Name="ContainCodition" Header="Contain Keyword" >
                     <GroupBox Header="คำที่ค้นหาใน Event" Background="Ivory" Foreground="Black" >
                         <Grid >
                             <Grid.ColumnDefinitions >
