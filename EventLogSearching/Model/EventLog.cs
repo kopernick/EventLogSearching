@@ -92,7 +92,7 @@ namespace EventLogSearching.Model
             this.m_strStationName = parts[(int)EventLogField.STATIONNAME_FIELD].ToString();
             this.m_strEvent = parts[(int)EventLogField.EVENT_FIELD].ToString();
             this.m_strMessage = parts[(int)EventLogField.MESSAGE_FIELD].ToString();
-            this.m_fValue = float.Parse( parts[(int)EventLogField.VALUE_FIELD].ToString() == " " ? parts[(int)EventLogField.VALUE_FIELD].ToString() : "0");
+            this.m_fValue = float.Parse(parts[(int)EventLogField.VALUE_FIELD].ToString() == " " ? parts[(int)EventLogField.VALUE_FIELD].ToString() : "0");
             this.m_strSource = parts[(int)EventLogField.SOURCE_FIELD].ToString();
 
         }

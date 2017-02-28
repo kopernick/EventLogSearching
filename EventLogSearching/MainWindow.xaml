@@ -213,9 +213,11 @@
                                         Binding="{Binding Message}"
                                         IsReadOnly="True"/>
 
+                       <!--
                         <DataGridTextColumn Header="Value"
                                         Binding="{Binding Value}"
                                         IsReadOnly="True"/>
+                        -->
 
                         <DataGridTextColumn Header="Source"
                                         Binding="{Binding Source}"
