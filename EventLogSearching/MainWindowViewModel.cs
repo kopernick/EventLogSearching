@@ -44,7 +44,16 @@ namespace EventLogSearching
         }
 
         private List<EventLog> listEventLog { get; set; }
-
+        public string _ErrorFile { get; set; }
+        public string ErrorFile
+        {
+            get { return _ErrorFile; }
+            set
+            {
+                _ErrorFile = value;
+                OnPropertyChanged("ErrorFile");
+            }
+        }
         public MessageBox myMessageBox { get; set; }
         private OpenFileDialog openFileDialog { get; set; }
         private SaveFileDialog saveFileDialog { get; set; }
@@ -154,6 +163,7 @@ namespace EventLogSearching
             this.searchParseDeleg = null;
 
             this.listEventLog = null;
+            this.ErrorFile = null;
 
 
             this.ListEventLog = new ObservableCollection<EventLog>();
@@ -264,6 +274,9 @@ namespace EventLogSearching
         {
             if (this.fileList != null)
             {
+                m_repoEventLog.ErrorFile.Clear();
+
+                this.ErrorFile = null;
 
                 List<SearchElement> searchItems = new List<SearchElement>();
                 searchItems.Add(new SearchElement(StrSearchEventList1, fieldName[(int)EventLogField.EVENT_FIELD], true));       // Event Include Keyword 1
@@ -286,7 +299,16 @@ namespace EventLogSearching
 
                     using (new WaitCursor())
                     {
+                        StringBuilder txt = new StringBuilder();
                         await Task.Run(() => m_repoEventLog.ReadRptFileAsync(fileList, searchParseDeleg));
+
+                        if (m_repoEventLog.ErrorFile.Count != 0)
+                            foreach (var item in m_repoEventLog.ErrorFile)
+                            { 
+                                txt.Append(item);
+                                txt.AppendLine();
+                            }
+                        this.ErrorFile  = txt.ToString();
                         // very long task
                     }
                 }

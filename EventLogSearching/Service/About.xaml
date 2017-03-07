@@ -47,7 +47,7 @@
         <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" 
                HorizontalAlignment="Center"
                 VerticalAlignment="Top">
-            Powered By Mr.Preecha Teerawong
+            Developer [Mr.Preecha Teerawong]
         </Label>
 
     </Grid>

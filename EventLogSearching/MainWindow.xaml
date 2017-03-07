@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EventLogSearching"
         xmlns:EventLogList="clr-namespace:EventLogSearching.EventLogList" 
         mc:Ignorable="d"
-        Title="Search SCADA EventPrintLog" Height="680" Width="1000">
+        Title="Search SCADA EventPrintLog" Height="680" Width="1050">
 
     <Window.Resources>
 
@@ -27,6 +27,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -91,6 +92,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
+                                
                             </Grid.RowDefinitions>
 
                             <!-- Column 1 -->
@@ -174,6 +176,15 @@
                                 Command="{Binding cmdSearching}" />
                     <RibbonButton  LargeImageSource="{StaticResource DelImage}" Label="ClearList" KeyTip="d"
                                 Command="{Binding cmdClearList}" />
+                </RibbonGroup>
+
+                <RibbonGroup x:Name="ErrorFile" Header="Error File(s)">
+                    <TextBox ScrollViewer.CanContentScroll="True" MinWidth="80" Width="Auto"
+                             TextWrapping="Wrap" AcceptsReturn="True" 
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             Text="{Binding ErrorFile, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>
+
                 </RibbonGroup>
 
             </RibbonTab>

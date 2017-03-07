@@ -21,7 +21,14 @@ namespace EventLogSearching.Repository
                 return m_listEventLogs;
             }
         }
-
+        private List<string> _ErrorFile { get; set; }
+        public List<string> ErrorFile
+        {
+            get
+            {
+                return _ErrorFile;
+            }
+        }
         private String m_strSearchEventParse;
         public String StrSearchEventParse
         {
@@ -35,6 +42,7 @@ namespace EventLogSearching.Repository
 
             this.m_strSearchEventParse = "UNBALANCE";
             //this.m_strSearchEventParse = "43CCS+43RCC";
+            this._ErrorFile = new List<string>();
 
         }
         public bool ReadRptFile()
@@ -160,17 +168,30 @@ namespace EventLogSearching.Repository
         public void ReadRptFileAsync(string[] fileList, Expression<Func<EventLog, bool>> filterParseDeleg)
         {
             // Compiling the expression tree into a delegate.  
+           
             Func<EventLog, bool> result = filterParseDeleg.Compile();
             this.m_listEventLogs.Clear();
 
             foreach (var file in fileList)
             {
-                IEnumerable<EventLog> listEventLog = File.ReadLines(file).Skip(4)
+                try
+                {
+                    IEnumerable<EventLog> listEventLog = File.ReadLines(file).Skip(4)
                           .Select(line => GetLineEventRptFile(line))
                           .Where(result)
                           .ToList<EventLog>();
 
-                this.m_listEventLogs.AddRange(listEventLog);
+                    this.m_listEventLogs.AddRange(listEventLog);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("File " + file.ToString()+ " Error");
+                    string FileName = Path.GetFileName(file);
+                    string FolderName = Path.GetFileName(Path.GetDirectoryName(file));
+                    this._ErrorFile.Add(FolderName +"\\" + FileName);
+                    continue;
+                }
+                
             }
 
         }
@@ -204,11 +225,18 @@ namespace EventLogSearching.Repository
                     int iLine = 0;
                     while (true)
                     {
-                        string[] parts = parser.ReadFields();
-                        if (parts == null) break;
-                        if (iLine++ == 0)
+                        try
                         {
-                            for (int iCol = 0; iCol < parts.Length; iCol++) iColumn.Add(parts[iCol]);
+                            string[] parts = parser.ReadFields();
+                            if (parts == null) break;
+                            if (iLine++ == 0)
+                            {
+                                for (int iCol = 0; iCol < parts.Length; iCol++) iColumn.Add(parts[iCol]);
+                                continue;
+                            }
+                        }
+                        catch
+                        {
                             continue;
                         }
                     }
