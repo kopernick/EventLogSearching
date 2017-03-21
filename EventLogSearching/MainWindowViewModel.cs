@@ -57,7 +57,7 @@ namespace EventLogSearching
         public MessageBox myMessageBox { get; set; }
         private OpenFileDialog openFileDialog { get; set; }
         private SaveFileDialog saveFileDialog { get; set; }
-        public string[] fileList { get; set; }
+        public List<string> fileList { get; set; }
         public string saveFileFullPath { get; set; }
         public string[] fieldName { get; set; }
 
@@ -201,7 +201,7 @@ namespace EventLogSearching
         private void onOpenFileCommand()
         {
             this.openFileDialog.ShowDialog();
-            this.fileList = openFileDialog.FileNames;
+            this.fileList = openFileDialog.FileNames.ToList();
             this.fileDirectory = Path.GetDirectoryName(fileList[0]).ToString();
 
         }
@@ -307,6 +307,7 @@ namespace EventLogSearching
                             { 
                                 txt.Append(item);
                                 txt.AppendLine();
+                                //this.fileList.Remove(item); //Remove Error File from List
                             }
                         this.ErrorFile  = txt.ToString();
                         // very long task

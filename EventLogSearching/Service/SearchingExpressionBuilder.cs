@@ -83,7 +83,8 @@ namespace EventLogSearching.Service
                     innerExp = Expression.OrElse(innerExp, GetPriSearchExpression<T>(pe, searchItem.FieldName, keyWord));
                 }
             }
-            if(searchItem.isInclude) return innerExp;
+            if(searchItem.isInclude)
+                return innerExp;
 
             return Expression.Not(innerExp);
         }

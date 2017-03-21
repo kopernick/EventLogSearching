@@ -107,7 +107,7 @@ namespace EventLogSearching.Repository
             }
         }
 
-        public void ReadRptFileAsync(string[] fileList, String StrSearchEventParse)
+        public void ReadRptFileAsync(List<string> fileList, String StrSearchEventParse)
         {
             this.m_listEventLogs.Clear();
 
@@ -165,7 +165,7 @@ namespace EventLogSearching.Repository
         }
 
         //Use Where by Linq Expression
-        public void ReadRptFileAsync(string[] fileList, Expression<Func<EventLog, bool>> filterParseDeleg)
+        public void ReadRptFileAsync(List<string> fileList, Expression<Func<EventLog, bool>> filterParseDeleg)
         {
             // Compiling the expression tree into a delegate.  
            

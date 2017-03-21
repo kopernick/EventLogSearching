@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_194B13E755AE49F582E5DF0D396BF554"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2DD116BAF74C4EBBF007E165A9DB5524"
         "OwnerKey" = "8:_9116A0B71FBD4C03BC1BF362C72E8D19"
         "MsmSig" = "8:_UNDEFINED"
@@ -28,13 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_2DD116BAF74C4EBBF007E165A9DB5524"
-        "OwnerKey" = "8:_7F30D1387FBA482DA0FBECE1B9877F60"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7F30D1387FBA482DA0FBECE1B9877F60"
-        "OwnerKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_194B13E755AE49F582E5DF0D396BF554"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,25 +52,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_05ED45AC8975C778E323CD783529F250"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7F30D1387FBA482DA0FBECE1B9877F60"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_9116A0B71FBD4C03BC1BF362C72E8D19"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_194B13E755AE49F582E5DF0D396BF554"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_2DD116BAF74C4EBBF007E165A9DB5524"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_05ED45AC8975C778E323CD783529F250"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -91,6 +91,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -107,6 +115,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -167,6 +183,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_194B13E755AE49F582E5DF0D396BF554"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:EventLogSearching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_194B13E755AE49F582E5DF0D396BF554"
+                    {
+                    "Name" = "8:EventLogSearching.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\EventLogSearching\\bin\\Release\\EventLogSearching.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4F5559D91BCE4A438E2C1BE368A9A353"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2DD116BAF74C4EBBF007E165A9DB5524"
             {
             "AssemblyRegister" = "3:1"
@@ -196,37 +243,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7F30D1387FBA482DA0FBECE1B9877F60"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:EventLogSearching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_7F30D1387FBA482DA0FBECE1B9877F60"
-                    {
-                    "Name" = "8:EventLogSearching.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\EventLogSearching\\bin\\Debug\\EventLogSearching.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_4F5559D91BCE4A438E2C1BE368A9A353"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A14419A9CEBF4B39875D5AA3F9FEF83A"
@@ -437,7 +453,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5F58BF07480A48438D17C006B0A40065"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D9B9745D8F5A4C449C8676060BB45826"
             {
             "Name" = "8:EventLogSearching"
             "Arguments" = "8:"
@@ -445,13 +461,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_7F30D1387FBA482DA0FBECE1B9877F60"
+            "Target" = "8:_194B13E755AE49F582E5DF0D396BF554"
             "Folder" = "8:_57136423F3574F8FAF5DC253B9A3C81E"
             "WorkingFolder" = "8:_4F5559D91BCE4A438E2C1BE368A9A353"
             "Icon" = "8:_A14419A9CEBF4B39875D5AA3F9FEF83A"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F9D3E2D6202940E1A2D96BDFE1368DFB"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_DE993BC9C6294E3CAE7230DF75FDC58B"
             {
             "Name" = "8:EventLogSearching"
             "Arguments" = "8:"
@@ -459,7 +475,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_7F30D1387FBA482DA0FBECE1B9877F60"
+            "Target" = "8:_194B13E755AE49F582E5DF0D396BF554"
             "Folder" = "8:_DB7EE0AEC5FF4F3DA1FC2E3BD4EF88E2"
             "WorkingFolder" = "8:_4F5559D91BCE4A438E2C1BE368A9A353"
             "Icon" = "8:_A14419A9CEBF4B39875D5AA3F9FEF83A"
@@ -866,7 +882,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9116A0B71FBD4C03BC1BF362C72E8D19"
             {
-            "SourcePath" = "8:..\\..\\EventLogSearching\\obj\\Debug\\EventLogSearching.exe"
+            "SourcePath" = "8:..\\..\\EventLogSearching\\obj\\Release\\EventLogSearching.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4F5559D91BCE4A438E2C1BE368A9A353"
