@@ -201,8 +201,13 @@ namespace EventLogSearching
         private void onOpenFileCommand()
         {
             this.openFileDialog.ShowDialog();
-            this.fileList = openFileDialog.FileNames.ToList();
-            this.fileDirectory = Path.GetDirectoryName(fileList[0]).ToString();
+
+            if(!(this.openFileDialog.FileNames == null || this.openFileDialog.FileNames.Count() < 1))
+            {
+                this.fileList = openFileDialog.FileNames.ToList();
+                this.fileDirectory = Path.GetDirectoryName(fileList[0]).ToString();
+            }
+            else MessageBox.Show("User clicked Cancel");
 
         }
 
@@ -235,7 +240,7 @@ namespace EventLogSearching
 
             //Generate CSV File
             if (ExportToCSV.CreateCSVFromGenericList(listEventLog, this.saveFileFullPath))
-                MessageBox.Show("Saving Complete @ " + this.saveFileFullPath.ToString(), "Saved Location", MessageBoxButton.OK, MessageBoxImage.Information); ;
+                MessageBox.Show("Saving Complete @ " + this.saveFileFullPath.ToString(), "Saved Location", MessageBoxButton.OK, MessageBoxImage.Information);
 
             this.listEventLog = null;
 
