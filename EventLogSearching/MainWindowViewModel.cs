@@ -20,7 +20,6 @@ namespace EventLogSearching
     {
         //Delegate
       
-
         private EventLogRepo m_repoEventLog;
 
        // public Expression<Func<EventLog, bool>> searchParseDeleg;
@@ -289,6 +288,8 @@ namespace EventLogSearching
                 searchItems.Add(new SearchElement(StrSearchEventList3, fieldName[(int)EventLogField.EVENT_FIELD], true));       // Event Include Keyword 3
                 searchItems.Add(new SearchElement(StrSearchEventList4, fieldName[(int)EventLogField.MESSAGE_FIELD], true));     // Message Include Keyword
                 searchItems.Add(new SearchElement(StrSearchEventList5, fieldName[(int)EventLogField.EVENT_FIELD], false));    // Event Exclude Keyword
+
+                //Generate Search Expression
                 searchParseDeleg = SearchingExpressionBuilder.GetExpression<EventLog>(searchItems);
 
                 if (searchParseDeleg == null)
