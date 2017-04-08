@@ -179,7 +179,10 @@ namespace EventLogSearching
 
 
             //gets all FieldName
-            var properties = typeof(EventLog).GetProperties();
+            var properties = from property in typeof(EventLog).GetProperties()
+                             let orderAttribute = property.GetCustomAttributes(typeof(OrderAttribute), false).SingleOrDefault() as OrderAttribute
+                             orderby orderAttribute.Order
+                             select property;
             this.fieldName = properties.Select(d => d.Name).ToArray();
 
             //Init Command
